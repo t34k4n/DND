@@ -3,27 +3,54 @@ import java.util.Random;
 public abstract class Class {
     protected String name;
     protected Classes unitClass;
-    protected int hitDie;
+    protected int attackRoll = 20;
     protected int health;
     protected int level;
-
+    protected Race race;
     protected Weapon weapon;
     protected Armor armor;
-
     protected Random random = new Random();
 
-    public int getHit() {
-        int hitRoll = random.nextInt(this.hitDie) + 1;               // 1..hitDie
-        int weaponRoll = random.nextInt(this.weapon.getDamage()) + 1; // 1..weaponDamage
-        return hitRoll + weaponRoll;
+    protected int getAttackDiceCounter() {
+        return 0;
     }
 
-    public int getDamage(int attack) {
-        int armorRoll = random.nextInt(this.armor.getProtection()) + 1; // 1..armorProtection
-        int netDamage = attack - armorRoll;
+    //calculates full damage
+    public int physicalHitDamage() {
+
+        int naturalAttacks = getAttackDiceCounter();
+        int weaponAttacks = this.weapon.getDiceCount();
+
+        int total = 0;
+
+        //calculates the normal attack dice
+        for (int i = 0; i < naturalAttacks; i++) {
+            int xattackRoll = random.nextInt(this.attackRoll) + 1;
+            total = total + xattackRoll;
+        }
+
+        //calculates the weapon attack dice
+        for (int i = 0; i < weaponAttacks; i++) {
+            int xweaponRoll = random.nextInt(this.weapon.getDamage()) + 1; // 1..weaponDamage
+            total = total + xweaponRoll;
+        }
+
+        return total;
+    }
+
+    /*
+    Future Workings
+    public int spellHitDamage() {
+
+    }
+    */
+
+    //calculates incoming damage
+    public void getDamage(int attack) {
+        int netDamage = attack - this.armor.getProtection();
 
         if (netDamage < 0) {
-            netDamage = 0; // armor fazla ise hasar 0
+            netDamage = 0;
         }
 
         this.health -= netDamage;
@@ -32,7 +59,7 @@ public abstract class Class {
             this.health = 0;
         }
 
-        return this.health; // kalan can
+        setHealth(this.health); // kalan can
     }
 
     public void setArmor(Armor armor) {
@@ -41,6 +68,14 @@ public abstract class Class {
 
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public Classes getUnitClass() {
@@ -54,4 +89,17 @@ public abstract class Class {
     public int getHealth() {
         return health;
     }
+
+    public int getRace() {
+        return race.ordinal();
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getAttackRoll() {
+        return attackRoll;
+    }
+
 }
