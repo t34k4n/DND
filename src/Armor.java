@@ -1,4 +1,5 @@
 public class Armor {
+
     private final String name;
     private final int protection;
     private final int cost;

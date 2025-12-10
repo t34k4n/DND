@@ -5,8 +5,8 @@ public class Rouge extends Class {
         this.unitClass = Classes.ROUGE;
         this.attackRoll = super.getAttackRoll();
 
-        this.weapon = Equipment.getDefaultWeapon(this.unitClass);
-        this.armor  = Equipment.getDefaultArmor(this.unitClass);
+        this.weapon = Items.getDefaultWeapon(this.unitClass);
+        this.armor  = Items.getDefaultArmor(this.unitClass);
 
         this.health = 15;
         this.level = 1;

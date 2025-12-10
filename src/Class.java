@@ -1,14 +1,19 @@
 import java.util.Random;
 
 public abstract class Class {
+
     protected String name;
     protected Classes unitClass;
     protected int attackRoll = 20;
     protected int health;
     protected int level;
     protected Race race;
+
     protected Weapon weapon;
     protected Armor armor;
+    protected Spells spell;
+    protected Cantrips cantrip;
+
     protected Random random = new Random();
 
     protected int getAttackDiceCounter() {
@@ -31,19 +36,40 @@ public abstract class Class {
 
         //calculates the weapon attack dice
         for (int i = 0; i < weaponAttacks; i++) {
-            int xweaponRoll = random.nextInt(this.weapon.getDamage()) + 1; // 1..weaponDamage
+            int xweaponRoll = random.nextInt(this.weapon.getDiceRoll()) + 1; // 1..weaponDamage
             total = total + xweaponRoll;
         }
 
         return total;
     }
 
-    /*
-    Future Workings
     public int spellHitDamage() {
 
+        int attack = 0;
+        int spellAttacks = this.spell.getDiceCount();
+
+        for (int i = 0; i < spellAttacks; i++) {
+            attack += random.nextInt(this.spell.getDiceRoll()) + 1;
+        }
+
+        return attack;
+
     }
-    */
+
+    public int cantripHitDamage() {
+
+        int attack = 0;
+        int cantripAttacks = this.cantrip.getDiceCountForLevelOnCantrips(this);
+
+        for (int i = 0; i < cantripAttacks; i++) {
+            attack += random.nextInt(this.cantrip.getDiceRoll()) + 1;
+        }
+
+        return attack;
+
+    }
+
+
 
     //calculates incoming damage
     public void getDamage(int attack) {
@@ -60,6 +86,10 @@ public abstract class Class {
         }
 
         setHealth(this.health); // kalan can
+    }
+
+    public void setCantrip(Cantrips cantrip) {
+        this.cantrip = cantrip;
     }
 
     public void setArmor(Armor armor) {

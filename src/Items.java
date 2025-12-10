@@ -1,16 +1,16 @@
-public class Equipment {
+public class Items {
 
     public static Weapon getDefaultWeapon(Classes unitClass) {
         switch (unitClass) {
             case WARRIOR:
-                return new Weapon("Long Sword", 10,1,1,Classes.WARRIOR);
+                return new Weapon("Long Sword", 10,1,1,14,Classes.WARRIOR);
             case ROUGE:
-                return new Weapon("Dagger", 8,1,1,Classes.ROUGE);
+                return new Weapon("Dagger", 8,1,1,6,Classes.ROUGE);
             case MAGE:
-                return new Weapon("Ice Staff", 6,1,1,Classes.MAGE);
+                return new Weapon("Ice Staff", 6,1,1,8,Classes.MAGE);
             case CLERIC:
             default:
-                return new Weapon("Sword", 8,1,1,Classes.CLERIC);
+                return new Weapon("Sword", 8,1,1,12,Classes.CLERIC);
         }
     }
 
@@ -25,6 +25,16 @@ public class Equipment {
             case CLERIC:
             default:
                 return new Armor("Chain Robe", 14,1);
+        }
+    }
+
+    public static Cantrips getCantrips(int number) {
+        switch (number) {
+            case 1:
+                return new Cantrips("Fire Bolt",1, 10);
+
+            default:
+                return new Cantrips("Eldritch Blast",1, 10);
         }
     }
 }
