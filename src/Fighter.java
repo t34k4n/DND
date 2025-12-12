@@ -1,18 +1,15 @@
-public class Mage extends Class {
+public class Fighter extends Class {
 
-    public Mage(String name, Race race) {
+    public Fighter(String name, Race race) {
         this.name = name;
-        this.unitClass = Classes.MAGE; // ROUGE değildi, düzelttik :)
+        this.unitClass = Classes.FIGHTER;
         this.attackRoll = super.getAttackRoll();
         this.race = race;
 
         this.weapon = Items.getDefaultWeapon(this.unitClass);
         this.armor  = Items.getDefaultArmor(this.unitClass);
 
-        this.cantrips = new Cantrips[5];
-        this.spells   = new Spells[10];
-
-        this.health = 16;
+        this.health = 21;
         this.level = 1;
     }
 

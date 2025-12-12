@@ -28,4 +28,8 @@ public class Spells {
         return diceCount;
     }
 
+    public String toString() {
+        return name + " (" + "D:" + diceRoll + ")";
+    }
+
 }

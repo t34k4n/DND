@@ -2,8 +2,8 @@ public class Items {
 
     public static Weapon getDefaultWeapon(Classes unitClass) {
         switch (unitClass) {
-            case WARRIOR:
-                return new Weapon("Long Sword", 10,1,1,14,Classes.WARRIOR);
+            case FIGHTER:
+                return new Weapon("Long Sword", 10,1,1,14,Classes.FIGHTER);
             case ROUGE:
                 return new Weapon("Dagger", 8,1,1,6,Classes.ROUGE);
             case MAGE:
@@ -16,7 +16,7 @@ public class Items {
 
     public static Armor getDefaultArmor(Classes unitClass) {
         switch (unitClass) {
-            case WARRIOR:
+            case FIGHTER:
                 return new Armor("Iron Plate", 18,1);
             case ROUGE:
                 return new Armor("Black Coat", 10,1);
@@ -28,13 +28,49 @@ public class Items {
         }
     }
 
-    public static Cantrips getCantrips(int number) {
+    public static Cantrips showCantrips(int number) {
+
         switch (number) {
             case 1:
-                return new Cantrips("Fire Bolt",1, 10);
-
+                return new Cantrips("Guidance", 4);
+            case 2:
+                return new Cantrips("Sacred Flame", 8);
+            case 3:
+                return new Cantrips("Ray of Frost", 8);
+            case 4:
+                return new Cantrips("Fire Bolt", 10);
+            case 5:
+                return new Cantrips("Eldritch Blast", 10);
             default:
-                return new Cantrips("Eldritch Blast",1, 10);
+                return null;
+        }
+    }
+
+    public static Spells showSpells(int number) {
+
+        switch (number) {
+            case 1:
+                return new Spells(1, 10,"BOK",1);
+            case 2:
+                return new Spells(1, 10,"BOK",1);
+            case 3:
+                return new Spells(1, 10,"BOK",1);
+            case 4:
+                return new Spells(1, 10,"BOK",1);
+            case 5:
+                return new Spells(1, 10,"BOK",1);
+            case 6:
+                return new Spells(1, 10,"BOK",1);
+            case 7:
+                return new Spells(1, 10,"BOK",1);
+            case 8:
+                return new Spells(1, 10,"BOK",1);
+            case 9:
+                return new Spells(1, 10,"BOK",1);
+            case 10:
+                return new Spells(1, 10,"BOK",1);
+            default:
+                return null;
         }
     }
 }

@@ -1,135 +1,304 @@
-import java.util.Random;
+import java.util.Scanner;
 
 public abstract class Class {
 
+    // ========== FIELDS ==========
     protected String name;
     protected Classes unitClass;
-    protected int attackRoll = 20;
-    protected int health;
-    protected int level;
     protected Race race;
+
+    protected int level;
+    protected int xp;
+    protected int health;
+    protected int attackRoll = 20;
 
     protected Weapon weapon;
     protected Armor armor;
-    protected Spells spell;
-    protected Cantrips cantrip;
 
-    protected Random random = new Random();
+    protected Cantrips[] cantrips;
+    protected Spells[] spells;
 
-    protected int getAttackDiceCounter() {
-        return 0;
+    private final Mechanics mechanics = new Mechanics();
+    protected final Scanner scanner = new Scanner(System.in);
+
+    // ========== ABSTRACT / OVERRIDABLE ==========
+    public abstract int getAttackDiceCounter();
+
+    // ========== XP / LEVEL ==========
+    public void addXp(int amount) {
+        if (amount <= 0) return;
+        this.xp += amount;
+        updateLevelFromXp();
     }
 
-    //calculates full damage
+    // D&D 5e XP eşikleri (1-20)
+    public void updateLevelFromXp() {
+        int newLevel = 1;
+
+        if (xp >= 355000) newLevel = 20;
+        else if (xp >= 305000) newLevel = 19;
+        else if (xp >= 265000) newLevel = 18;
+        else if (xp >= 225000) newLevel = 17;
+        else if (xp >= 195000) newLevel = 16;
+        else if (xp >= 165000) newLevel = 15;
+        else if (xp >= 140000) newLevel = 14;
+        else if (xp >= 120000) newLevel = 13;
+        else if (xp >= 100000) newLevel = 12;
+        else if (xp >= 85000)  newLevel = 11;
+        else if (xp >= 64000)  newLevel = 10;
+        else if (xp >= 48000)  newLevel = 9;
+        else if (xp >= 34000)  newLevel = 8;
+        else if (xp >= 23000)  newLevel = 7;
+        else if (xp >= 14000)  newLevel = 6;
+        else if (xp >= 6500)   newLevel = 5;
+        else if (xp >= 2700)   newLevel = 4;
+        else if (xp >= 900)    newLevel = 3;
+        else if (xp >= 300)    newLevel = 2;
+
+        if (newLevel != this.level) {
+            this.level = newLevel;
+            System.out.println("Level Up! New level: " + this.level);
+        }
+    }
+
+    // ========== COMBAT (WRAPPERS) ==========
     public int physicalHitDamage() {
-
-        int naturalAttacks = getAttackDiceCounter();
-        int weaponAttacks = this.weapon.getDiceCount();
-
-        int total = 0;
-
-        //calculates the normal attack dice
-        for (int i = 0; i < naturalAttacks; i++) {
-            int xattackRoll = random.nextInt(this.attackRoll) + 1;
-            total = total + xattackRoll;
-        }
-
-        //calculates the weapon attack dice
-        for (int i = 0; i < weaponAttacks; i++) {
-            int xweaponRoll = random.nextInt(this.weapon.getDiceRoll()) + 1; // 1..weaponDamage
-            total = total + xweaponRoll;
-        }
-
-        return total;
+        return mechanics.physicalHitDamage(this);
     }
 
     public int spellHitDamage() {
+        int idx = chooseSpellSlot();
+        if (idx == -1) return 0;
 
-        int attack = 0;
-        int spellAttacks = this.spell.getDiceCount();
-
-        for (int i = 0; i < spellAttacks; i++) {
-            attack += random.nextInt(this.spell.getDiceRoll()) + 1;
+        int dmg = mechanics.spellHitDamage(this, idx);
+        if (dmg == 0) {
+            // ya slot boş, ya level yetmiyor, ya invalid
+            Spells s = spells[idx];
+            if (s != null && s.getRequiredLevel() > this.level) {
+                System.out.println("Your level is too low for: " + s.getName());
+            } else {
+                System.out.println("Spell failed or empty slot.");
+            }
         }
-
-        return attack;
-
+        return dmg;
     }
 
     public int cantripHitDamage() {
+        int idx = chooseCantripSlot();
+        if (idx == -1) return 0;
 
-        int attack = 0;
-        int cantripAttacks = this.cantrip.getDiceCountForLevelOnCantrips(this);
-
-        for (int i = 0; i < cantripAttacks; i++) {
-            attack += random.nextInt(this.cantrip.getDiceRoll()) + 1;
+        int dmg = mechanics.cantripHitDamage(this, idx);
+        if (dmg == 0) {
+            System.out.println("Cantrip failed or empty slot.");
         }
-
-        return attack;
-
+        return dmg;
     }
 
-
-
-    //calculates incoming damage
     public void getDamage(int attack) {
-        int netDamage = attack - this.armor.getProtection();
+        mechanics.applyDamage(this, attack);
+    }
 
-        if (netDamage < 0) {
-            netDamage = 0;
+    // ========== CHOICE MENUS ==========
+    private int chooseSpellSlot() {
+        if (spells == null || spells.length == 0) {
+            System.out.println("No spell slots available.");
+            return -1;
         }
 
-        this.health -= netDamage;
-
-        if (this.health < 0) {
-            this.health = 0;
+        System.out.println("Pick the spell slot to use:");
+        for (int i = 0; i < spells.length; i++) {
+            System.out.println(i + " - " + (spells[i] == null ? "(empty)" : spells[i]));
         }
 
-        setHealth(this.health); // kalan can
+        int slot = scanner.nextInt();
+        if (slot < 0 || slot >= spells.length) {
+            System.out.println("Invalid slot.");
+            return -1;
+        }
+        if (spells[slot] == null) {
+            System.out.println("That slot is empty.");
+            return -1;
+        }
+        return slot;
     }
 
-    public void setCantrip(Cantrips cantrip) {
-        this.cantrip = cantrip;
+    private int chooseCantripSlot() {
+        if (cantrips == null || cantrips.length == 0) {
+            System.out.println("No cantrip slots available.");
+            return -1;
+        }
+
+        System.out.println("Pick the cantrip slot to use:");
+        for (int i = 0; i < cantrips.length; i++) {
+            System.out.println(i + " - " + (cantrips[i] == null ? "(empty)" : cantrips[i]));
+        }
+
+        int slot = scanner.nextInt();
+        if (slot < 0 || slot >= cantrips.length) {
+            System.out.println("Invalid slot.");
+            return -1;
+        }
+        if (cantrips[slot] == null) {
+            System.out.println("That slot is empty.");
+            return -1;
+        }
+        return slot;
     }
 
-    public void setArmor(Armor armor) {
-        this.armor = armor;
+    // ========== CANTRIP MANAGEMENT ==========
+    public void removeCantrip() {
+        if (cantrips == null || cantrips.length == 0) {
+            System.out.println("No cantrip slots available.");
+            return;
+        }
+
+        System.out.println("Pick the slot you want to remove:");
+        for (int i = 0; i < cantrips.length; i++) {
+            System.out.println(i + " - " + (cantrips[i] == null ? "(empty)" : cantrips[i]));
+        }
+
+        int slot = scanner.nextInt();
+        if (slot < 0 || slot >= cantrips.length) {
+            System.out.println("Invalid slot.");
+            return;
+        }
+        if (cantrips[slot] == null) {
+            System.out.println("That slot is already empty.");
+            return;
+        }
+
+        System.out.println("Removed: " + cantrips[slot].getName());
+        cantrips[slot] = null;
     }
 
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+    public void addCantrip() {
+        if (cantrips == null || cantrips.length == 0) {
+            System.out.println("No cantrip slots available.");
+            return;
+        }
+
+        int emptySlot = -1;
+        for (int i = 0; i < cantrips.length; i++) {
+            if (cantrips[i] == null) { emptySlot = i; break; }
+        }
+        if (emptySlot == -1) {
+            System.out.println("All cantrip slots are full.");
+            return;
+        }
+
+        System.out.println("Pick the cantrip you want to add:");
+        for (int i = 1; i <= 5; i++) {
+            System.out.println(i + " - " + Items.showCantrips(i));
+        }
+
+        int choice = scanner.nextInt();
+        Cantrips selected = Items.showCantrips(choice);
+
+        if (selected == null) {
+            System.out.println("Invalid cantrip selection.");
+            return;
+        }
+
+        for (Cantrips c : cantrips) {
+            if (c != null && c.getName().equals(selected.getName())) {
+                System.out.println("You already have that cantrip.");
+                return;
+            }
+        }
+
+        cantrips[emptySlot] = selected;
+        System.out.println("Added to slot " + emptySlot + ": " + selected.getName());
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    // ========== SPELL MANAGEMENT ==========
+    public void removeSpell() {
+        if (spells == null || spells.length == 0) {
+            System.out.println("No spell slots available.");
+            return;
+        }
+
+        System.out.println("Pick the slot you want to remove:");
+        for (int i = 0; i < spells.length; i++) {
+            System.out.println(i + " - " + (spells[i] == null ? "(empty)" : spells[i]));
+        }
+
+        int slot = scanner.nextInt();
+        if (slot < 0 || slot >= spells.length) {
+            System.out.println("Invalid slot.");
+            return;
+        }
+        if (spells[slot] == null) {
+            System.out.println("That slot is already empty.");
+            return;
+        }
+
+        System.out.println("Removed: " + spells[slot].getName());
+        spells[slot] = null;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public void addSpell() {
+        if (spells == null || spells.length == 0) {
+            System.out.println("No spell slots available.");
+            return;
+        }
+
+        int emptySlot = -1;
+        for (int i = 0; i < spells.length; i++) {
+            if (spells[i] == null) { emptySlot = i; break; }
+        }
+        if (emptySlot == -1) {
+            System.out.println("All spell slots are full.");
+            return;
+        }
+
+        System.out.println("Pick the spell you want to add:");
+        for (int i = 1; i <= 5; i++) {
+            System.out.println(i + " - " + Items.showSpells(i));
+        }
+
+        int choice = scanner.nextInt();
+        Spells selected = Items.showSpells(choice);
+
+        if (selected == null) {
+            System.out.println("Invalid spell selection.");
+            return;
+        }
+
+        if (selected.getRequiredLevel() > this.level) {
+            System.out.println("Your level is too low for: " + selected.getName());
+            return;
+        }
+
+        for (Spells s : spells) {
+            if (s != null && s.getName().equals(selected.getName())) {
+                System.out.println("You already have that spell.");
+                return;
+            }
+        }
+
+        spells[emptySlot] = selected;
+        System.out.println("Added to slot " + emptySlot + ": " + selected.getName());
     }
 
-    public Classes getUnitClass() {
-        return unitClass;
-    }
+    // ========== SETTERS ==========
+    public void setCantrip(Cantrips cantrip, int index) { this.cantrips[index] = cantrip; }
+    public void setSpells(Spells spell, int index)     { this.spells[index] = spell; }
+    public void setArmor(Armor armor)                  { this.armor = armor; }
+    public void setWeapon(Weapon weapon)               { this.weapon = weapon; }
+    public void setLevel(int level)                    { this.level = level; }
+    public void setHealth(int health)                  { this.health = health; }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public int getRace() {
-        return race.ordinal();
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public int getAttackRoll() {
-        return attackRoll;
-    }
+    // ========== GETTERS ==========
+    public Classes getUnitClass() { return unitClass; }
+    public String getName()       { return name; }
+    public int getHealth()        { return health; }
+    public int getRace()          { return race.ordinal(); }
+    public int getLevel()         { return level; }
+    public int getXp()            { return xp; }
+    public int getAttackRoll()    { return attackRoll; }
+    public Weapon getWeapon()     { return weapon; }
+    public Armor getArmor()       { return armor; }
+    public Spells getSpell(int index)     { return spells[index]; }
+    public Cantrips getCantrip(int index) { return cantrips[index]; }
 
 }

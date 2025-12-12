@@ -1,3 +1,3 @@
 public enum Classes {
-    WARRIOR,CLERIC,MAGE,ROUGE;
+    FIGHTER,CLERIC,MAGE,ROUGE;
 }

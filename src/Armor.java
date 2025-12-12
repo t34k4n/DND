@@ -21,4 +21,5 @@ public class Armor {
     public int getCost() {
         return cost;
     }
+
 }
