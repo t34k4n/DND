@@ -1,13 +1,10 @@
-public class Rouge extends Class {
+public class Rogue extends Class {
 
     public Rouge(String name, Race race) {
         this.name = name;
         this.unitClass = Classes.ROUGE;
         this.attackRoll = super.getAttackRoll();
         this.race = race;
-
-        this.action = 1;
-        this.bonusAction = 1;
 
         this.weapon = Items.getDefaultWeapon(this.unitClass);
         this.armor  = Items.getDefaultArmor(this.unitClass);
@@ -18,7 +15,7 @@ public class Rouge extends Class {
 
     @Override
     public int getAttackDiceCounter() {
-        return 0;
+        return 1;
     }
 
 }

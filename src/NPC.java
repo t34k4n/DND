@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public abstract class NPC {
+public abstract class NPC implements Combatant {
     // ========== FIELDS ==========
     protected String name;
     protected Types unitType;
@@ -16,7 +16,5 @@ public abstract class NPC {
 
     protected Cantrips[] cantrips;
     protected Spells[] spells;
-
-    private final Mechanics mechanics = new Mechanics();
 
 }

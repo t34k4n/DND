@@ -1,13 +1,11 @@
 import java.util.Scanner;
 
-public abstract class Class {
+public abstract class Class implements Combatant{
 
     // ========== FIELDS ==========
     protected String name;
     protected Classes unitClass;
     protected Race race;
-    protected int action;
-    protected int bonusAction;
 
     protected int level;
     protected int xp;
