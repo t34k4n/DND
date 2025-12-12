@@ -6,6 +6,8 @@ public abstract class Class {
     protected String name;
     protected Classes unitClass;
     protected Race race;
+    protected int action;
+    protected int bonusAction;
 
     protected int level;
     protected int xp;
@@ -62,9 +64,6 @@ public abstract class Class {
     }
 
     // ========== COMBAT (WRAPPERS) ==========
-    public int physicalHitDamage() {
-        return mechanics.physicalHitDamage(this);
-    }
 
     public int spellHitDamage() {
         int idx = chooseSpellSlot();
@@ -94,9 +93,6 @@ public abstract class Class {
         return dmg;
     }
 
-    public void getDamage(int attack) {
-        mechanics.applyDamage(this, attack);
-    }
 
     // ========== CHOICE MENUS ==========
     private int chooseSpellSlot() {

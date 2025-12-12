@@ -3,24 +3,6 @@ import java.util.Random;
 public class Mechanics {
     private final Random random = new Random();
 
-    public int physicalHitDamage(Class c) {
-        int naturalAttacks = c.getAttackDiceCounter();
-        int weaponAttacks  = c.getWeapon().getDiceCount();
-
-        int total = 0;
-
-        // (Not: D&D'de d20 hit içindir; senin sistemde "damage'e eklenen doğal zar" gibi duruyor.)
-        for (int i = 0; i < naturalAttacks; i++) {
-            total += random.nextInt(c.getAttackRoll()) + 1;
-        }
-
-        for (int i = 0; i < weaponAttacks; i++) {
-            total += random.nextInt(c.getWeapon().getDiceRoll()) + 1;
-        }
-
-        return total;
-    }
-
     public int spellHitDamage(Class caster, int spellIndex) {
         if (caster == null || caster.spells == null || caster.spells.length == 0) return 0;
         if (spellIndex < 0 || spellIndex >= caster.spells.length) return 0;
@@ -54,6 +36,7 @@ public class Mechanics {
         return total;
     }
 
+
     private int getCantripDiceCountByLevel(int level) {
         if (level >= 17) return 4;
         if (level >= 11) return 3;
@@ -61,10 +44,6 @@ public class Mechanics {
         return 1;
     }
 
-    public void applyDamage(Class target, int attack) {
-        int netDamage = attack - target.getArmor().getProtection();
-        if (netDamage < 0) netDamage = 0;
 
-        target.setHealth(Math.max(0, target.getHealth() - netDamage));
-    }
+
 }

@@ -6,6 +6,9 @@ public class Cleric extends Class {
         this.attackRoll = super.getAttackRoll();
         this.race = race;
 
+        this.action = 1;
+        this.bonusAction = 1;
+
         this.weapon = Items.getDefaultWeapon(this.unitClass);
         this.armor  = Items.getDefaultArmor(this.unitClass);
 
