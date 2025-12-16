@@ -3,14 +3,14 @@ public class Items {
     public static Weapon getDefaultWeapon(Classes unitClass) {
         switch (unitClass) {
             case FIGHTER:
-                return new Weapon("Long Sword", 10,1,1,14,Classes.FIGHTER);
+                return new Weapon("Long Sword",1,1,14,Classes.FIGHTER);
             case ROUGE:
-                return new Weapon("Dagger", 8,1,1,6,Classes.ROUGE);
+                return new Weapon("Dagger",1,1,6,Classes.ROUGE);
             case MAGE:
-                return new Weapon("Ice Staff", 6,1,1,8,Classes.MAGE);
+                return new Weapon("Ice Staff",1,1,8,Classes.MAGE);
             case CLERIC:
             default:
-                return new Weapon("Sword", 8,1,1,12,Classes.CLERIC);
+                return new Weapon("Sword",1,1,12,Classes.CLERIC);
         }
     }
 

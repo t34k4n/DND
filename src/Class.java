@@ -11,6 +11,7 @@ public abstract class Class implements Combatant{
     protected int xp;
     protected int health;
     protected int attackRoll = 20;
+    protected int attackCount = 1;
 
     protected Weapon weapon;
     protected Armor armor;
@@ -22,7 +23,7 @@ public abstract class Class implements Combatant{
     protected final Scanner scanner = new Scanner(System.in);
 
     // ========== ABSTRACT / OVERRIDABLE ==========
-    public abstract int getAttackDiceCounter();
+    public abstract void getLevelUp();
 
     // ========== XP / LEVEL ==========
     public void addXp(int amount) {
@@ -44,16 +45,16 @@ public abstract class Class implements Combatant{
         else if (xp >= 140000) newLevel = 14;
         else if (xp >= 120000) newLevel = 13;
         else if (xp >= 100000) newLevel = 12;
-        else if (xp >= 85000)  newLevel = 11;
-        else if (xp >= 64000)  newLevel = 10;
-        else if (xp >= 48000)  newLevel = 9;
-        else if (xp >= 34000)  newLevel = 8;
-        else if (xp >= 23000)  newLevel = 7;
-        else if (xp >= 14000)  newLevel = 6;
-        else if (xp >= 6500)   newLevel = 5;
-        else if (xp >= 2700)   newLevel = 4;
-        else if (xp >= 900)    newLevel = 3;
-        else if (xp >= 300)    newLevel = 2;
+        else if (xp >= 85000) newLevel = 11;
+        else if (xp >= 64000) newLevel = 10;
+        else if (xp >= 48000) newLevel = 9;
+        else if (xp >= 34000) newLevel = 8;
+        else if (xp >= 23000) newLevel = 7;
+        else if (xp >= 14000) newLevel = 6;
+        else if (xp >= 6500) newLevel = 5;
+        else if (xp >= 2700) newLevel = 4;
+        else if (xp >= 900) newLevel = 3;
+        else if (xp >= 300) newLevel = 2;
 
         if (newLevel != this.level) {
             this.level = newLevel;
@@ -61,39 +62,8 @@ public abstract class Class implements Combatant{
         }
     }
 
-    // ========== COMBAT (WRAPPERS) ==========
-
-    public int spellHitDamage() {
-        int idx = chooseSpellSlot();
-        if (idx == -1) return 0;
-
-        int dmg = mechanics.spellHitDamage(this, idx);
-        if (dmg == 0) {
-            // ya slot boş, ya level yetmiyor, ya invalid
-            Spells s = spells[idx];
-            if (s != null && s.getRequiredLevel() > this.level) {
-                System.out.println("Your level is too low for: " + s.getName());
-            } else {
-                System.out.println("Spell failed or empty slot.");
-            }
-        }
-        return dmg;
-    }
-
-    public int cantripHitDamage() {
-        int idx = chooseCantripSlot();
-        if (idx == -1) return 0;
-
-        int dmg = mechanics.cantripHitDamage(this, idx);
-        if (dmg == 0) {
-            System.out.println("Cantrip failed or empty slot.");
-        }
-        return dmg;
-    }
-
-
     // ========== CHOICE MENUS ==========
-    private int chooseSpellSlot() {
+    public int chooseSpellSlot() {
         if (spells == null || spells.length == 0) {
             System.out.println("No spell slots available.");
             return -1;
@@ -116,7 +86,7 @@ public abstract class Class implements Combatant{
         return slot;
     }
 
-    private int chooseCantripSlot() {
+    public int chooseCantripSlot() {
         if (cantrips == null || cantrips.length == 0) {
             System.out.println("No cantrip slots available.");
             return -1;
@@ -292,6 +262,7 @@ public abstract class Class implements Combatant{
     public int getAttackRoll()    { return attackRoll; }
     public Weapon getWeapon()     { return weapon; }
     public Armor getArmor()       { return armor; }
+    public int getAttackCount() { return attackCount; }
     public Spells getSpell(int index)     { return spells[index]; }
     public Cantrips getCantrip(int index) { return cantrips[index]; }
 

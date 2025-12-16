@@ -2,7 +2,6 @@ import java.lang.classfile.attribute.RuntimeInvisibleTypeAnnotationsAttribute;
 
 public class Weapon {
     private final String name;
-    private final int damage;
 
     private final int cost;
     private final int diceCount;
@@ -10,10 +9,9 @@ public class Weapon {
 
     private final Classes unitClass;
 
-    public Weapon(String name, int damage, int cost, int diceCount,int diceRoll, Classes unitClass) {
+    public Weapon(String name, int cost, int diceCount,int diceRoll, Classes unitClass) {
 
         this.name = name;
-        this.damage = damage;
 
         this.cost = cost;
         this.diceCount = diceCount;
@@ -24,10 +22,6 @@ public class Weapon {
 
     public String getName() {
         return name;
-    }
-
-    public int getDamage() {
-        return damage;
     }
 
     public int getDiceCount() {

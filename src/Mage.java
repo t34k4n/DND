@@ -14,11 +14,11 @@ public class Mage extends Class {
 
         this.health = 16;
         this.level = 1;
+        this.xp = 1;
     }
 
     @Override
-    public int getAttackDiceCounter() {
-        return 1;
+    public void getLevelUp() {
     }
 
 }

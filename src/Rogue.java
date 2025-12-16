@@ -1,6 +1,6 @@
 public class Rogue extends Class {
 
-    public Rouge(String name, Race race) {
+    public Rogue(String name, Race race) {
         this.name = name;
         this.unitClass = Classes.ROUGE;
         this.attackRoll = super.getAttackRoll();
@@ -11,11 +11,13 @@ public class Rogue extends Class {
 
         this.health = 15;
         this.level = 1;
+        this.xp = 1;
+
     }
 
     @Override
-    public int getAttackDiceCounter() {
-        return 1;
+    public void getLevelUp() {
+
     }
 
 }

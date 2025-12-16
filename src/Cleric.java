@@ -17,8 +17,15 @@ public class Cleric extends Class {
     }
 
     @Override
-    public int getAttackDiceCounter() {
-        return 1;
+    public void getLevelUp() {
+        if(this.level == 1){
+           addCantrip();
+        } else if (this.level == 5) {
+            this.attackCount = 2;
+        } else if (this.level == 11) {
+            this.attackCount = 3;
+        } else if (this.level == 20){
+            this.attackCount = 4;
+        }
     }
-
 }
