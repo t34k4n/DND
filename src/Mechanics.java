@@ -54,10 +54,51 @@ public class Mechanics {
     }
 
 
-    public void combat(){
+    public int startCombatPlayer(Class player, NPC npc){
+        int playerDiceCheck = random.nextInt(20) + 1;
+        int npcDiceCheck = random.nextInt(20) + 1;
 
+        if(npcDiceCheck > playerDiceCheck){
+            System.out.println("Player " + player.getName() + " dice check failed!");
+            return 1;
+        } else if (playerDiceCheck > npcDiceCheck) {
+            System.out.println("Player " + player.getName() + " dice check succeed!");
+            return 0;
+        } else  {
+            System.out.println("Player " + player.getName() + " miss.");
+            return 1;
+        }
     }
 
+    public int startCombatNpc(Class player, NPC npc){
+        int playerDiceCheck = random.nextInt(20) + 1;
+        int npcDiceCheck = random.nextInt(20) + 1;
+
+        if(npcDiceCheck > playerDiceCheck){
+            System.out.println("NPC " + npc.getName() + " dice check succeed!");
+            return 0;
+        } else if (playerDiceCheck > npcDiceCheck) {
+            System.out.println("NPC " + npc.getName() + " dice check failed!");
+            return 1;
+        } else  {
+            System.out.println("NPC " + player.getName() + " miss.");
+            return 1;
+        }
+    }
+
+    public void combatInitiaed(Class player, NPC npc){
+
+        int startNumber = startCombatPlayer(player, npc);
+        if(0 == startNumber){
+            System.out.println("Player " + player.getName() + " Starts combat!");
+        } else if (1 == startNumber) {
+            System.out.println("Npc " + player.getName() + " Starts combat!");
+        }
+
+        while(player.health == 0 || npc.health == 0){
+
+        }
+    }
 
 
 

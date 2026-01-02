@@ -3,14 +3,14 @@ public class Items {
     public static Weapon getDefaultWeapon(Classes unitClass) {
         switch (unitClass) {
             case FIGHTER:
-                return new Weapon("Long Sword",1,1,14,Classes.FIGHTER);
+                return new Weapon("Long Sword", 10,1,14,Classes.FIGHTER);
             case ROUGE:
-                return new Weapon("Dagger",1,1,6,Classes.ROUGE);
+                return new Weapon("Dagger", 8,1,10,Classes.ROUGE);
             case MAGE:
-                return new Weapon("Ice Staff",1,1,8,Classes.MAGE);
+                return new Weapon("Ice Staff", 6,1,8,Classes.MAGE);
             case CLERIC:
             default:
-                return new Weapon("Sword",1,1,12,Classes.CLERIC);
+                return new Weapon("Sword", 8,1,12,Classes.CLERIC);
         }
     }
 
@@ -28,49 +28,12 @@ public class Items {
         }
     }
 
-    public static Cantrips showCantrips(int number) {
-
+    public static Cantrips getCantrips(int number) {
         switch (number) {
             case 1:
-                return new Cantrips("Guidance", 4);
-            case 2:
-                return new Cantrips("Sacred Flame", 8);
-            case 3:
-                return new Cantrips("Ray of Frost", 8);
-            case 4:
-                return new Cantrips("Fire Bolt", 10);
-            case 5:
-                return new Cantrips("Eldritch Blast", 10);
+                return new Cantrips("Fire Bolt",10);
             default:
-                return null;
-        }
-    }
-
-    public static Spells showSpells(int number) {
-
-        switch (number) {
-            case 1:
-                return new Spells(1, 10,"BOK",1);
-            case 2:
-                return new Spells(1, 10,"BOK",1);
-            case 3:
-                return new Spells(1, 10,"BOK",1);
-            case 4:
-                return new Spells(1, 10,"BOK",1);
-            case 5:
-                return new Spells(1, 10,"BOK",1);
-            case 6:
-                return new Spells(1, 10,"BOK",1);
-            case 7:
-                return new Spells(1, 10,"BOK",1);
-            case 8:
-                return new Spells(1, 10,"BOK",1);
-            case 9:
-                return new Spells(1, 10,"BOK",1);
-            case 10:
-                return new Spells(1, 10,"BOK",1);
-            default:
-                return null;
+                return new Cantrips("Eldritch Blast",10);
         }
     }
 }
